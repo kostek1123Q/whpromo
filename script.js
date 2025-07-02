@@ -1,6 +1,32 @@
-const webhookURL = "https://discord.com/api/webhooks/1390094366764306533/QuQVXQaVmT_ozabnxo8lQH09uhDBQN924aOvU41a53pZtmUHjiMerBk5SyrsTNMu5Udl"; // <== Uzupełnij
+const webhookURL = "https://discord.com/api/webhooks/1390094366764306533/QuQVXQaVmT_ozabnxo8lQH09uhDBQN924aOvU41a53pZtmUHjiMerBk5SyrsTNMu5Udl"; // <== Wstaw swój webhook
 
-let currentSort = "new"; // domyślnie: najnowsze
+let currentSort = "new";
+const ADMIN_PASSWORD = "admin123"; // zmień hasło admina
+
+// Sprawdź, czy jest admin w sesji
+function isAdmin() {
+  return sessionStorage.getItem("isAdmin") === "true";
+}
+
+// Przełącz tryb admina
+function toggleAdmin() {
+  if (isAdmin()) {
+    sessionStorage.removeItem("isAdmin");
+    alert("Wylogowano z trybu admina.");
+    renderLists();
+  } else {
+    const pass = prompt("Podaj hasło admina:");
+    if (pass === ADMIN_PASSWORD) {
+      sessionStorage.setItem("isAdmin", "true");
+      alert("Zalogowano jako admin!");
+      renderLists();
+    } else {
+      alert("Błędne hasło.");
+    }
+  }
+}
+
+document.getElementById("adminToggle").addEventListener("click", toggleAdmin);
 
 async function sendToDiscord(data) {
   const payload = {
@@ -62,9 +88,9 @@ function renderStars(link, container) {
 }
 
 function sortEntries(entries) {
-  if (currentSort === "new") return entries.reverse();
+  if (currentSort === "new") return entries.slice().reverse();
   if (currentSort === "best") {
-    return entries.sort((a, b) => getRatingFor(b.link) - getRatingFor(a.link));
+    return entries.slice().sort((a, b) => getRatingFor(b.link) - getRatingFor(a.link));
   }
   return entries;
 }
@@ -85,13 +111,32 @@ function renderLists() {
     const li = document.createElement("li");
     li.innerHTML = `
       <strong>${entry.name}</strong><br/>
-      <a href="${entry.link}" target="_blank">Otwórz</a>
+      <a href="${entry.link}" target="_blank" rel="noopener noreferrer">Otwórz</a>
     `;
 
     const starsDiv = document.createElement("div");
     starsDiv.className = "stars";
     renderStars(entry.link, starsDiv);
     li.appendChild(starsDiv);
+
+    if (isAdmin()) {
+      const actionsDiv = document.createElement("div");
+      actionsDiv.className = "entry-actions";
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✏️ Edytuj";
+      editBtn.className = "edit-btn";
+      editBtn.onclick = () => editEntry(entry);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑️ Usuń";
+      deleteBtn.className = "delete-btn";
+      deleteBtn.onclick = () => deleteEntry(entry.link);
+
+      actionsDiv.appendChild(editBtn);
+      actionsDiv.appendChild(deleteBtn);
+      li.appendChild(actionsDiv);
+    }
 
     if (entry.type === "Grupa") groupList.appendChild(li);
     else channelList.appendChild(li);
@@ -104,7 +149,7 @@ function renderRanking(entries) {
   const rankingList = document.getElementById("rankingList");
   rankingList.innerHTML = "";
 
-  const sorted = [...entries]
+  const sorted = entries
     .map(entry => ({ ...entry, rating: getRatingFor(entry.link) }))
     .filter(e => e.rating > 0)
     .sort((a, b) => b.rating - a.rating)
@@ -115,6 +160,42 @@ function renderRanking(entries) {
     li.innerHTML = `⭐ <strong>${entry.name}</strong> – Ocena: ${entry.rating}/5`;
     rankingList.appendChild(li);
   });
+}
+
+function deleteEntry(link) {
+  if (!confirm("Na pewno chcesz usunąć ten wpis?")) return;
+  let entries = getEntries();
+  entries = entries.filter(e => e.link !== link);
+  saveEntries(entries);
+  renderLists();
+}
+
+function editEntry(entry) {
+  const newName = prompt("Nowa nazwa:", entry.name);
+  if (newName === null) return;
+
+  const newLink = prompt("Nowy link:", entry.link);
+  if (newLink === null) return;
+
+  const newType = prompt("Typ (Grupa/Kanał):", entry.type);
+  if (newType === null) return;
+  if (newType !== "Grupa" && newType !== "Kanał") {
+    alert("Typ musi być 'Grupa' lub 'Kanał'");
+    return;
+  }
+
+  let entries = getEntries();
+  const index = entries.findIndex(e => e.link === entry.link);
+  if (index === -1) return;
+
+  entries[index] = {
+    name: newName.trim(),
+    link: newLink.trim(),
+    type: newType,
+  };
+
+  saveEntries(entries);
+  renderLists();
 }
 
 document.querySelector("#addForm").addEventListener("submit", function (e) {
