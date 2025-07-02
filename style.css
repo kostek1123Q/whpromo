@@ -1,15 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 body {
   background-color: #000000;
   color: #25d366;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 1rem;
   text-align: center;
   user-select: none;
 }
 
-header {
-  margin-bottom: 1.5rem;
+header h1 {
+  font-weight: 600;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
   text-shadow:
     0 0 5px #25d366,
     0 0 10px #25d366,
@@ -17,247 +21,104 @@ header {
     0 0 40px #25d366;
 }
 
-h1, h2 {
-  margin: 0.5rem 0;
-  text-shadow:
-    0 0 8px #25d366,
-    0 0 15px #25d366;
-}
-
-#adminToggle {
-  background: #25d366;
-  color: #000;
-  padding: 0.5rem 1.5rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow:
-    0 0 8px #25d366,
-    0 0 20px #25d366;
-  transition: background-color 0.3s;
-  margin-top: 1rem;
-}
-
-#adminToggle:hover {
-  background: #1ebc4b;
-  box-shadow:
-    0 0 15px #1ebc4b,
-    0 0 35px #1ebc4b;
-}
-
-#addSection, #searchSection, #listsSection {
-  max-width: 600px;
-  margin: 1rem auto;
-  background-color: #111c11;
-  padding: 1rem 2rem 2rem 2rem;
-  border-radius: 16px;
-  box-shadow:
-    0 0 10px #25d366,
-    inset 0 0 20px #25d366;
-}
-
-#addForm input,
-#addForm select,
-#addForm button,
-#searchInput {
+button, input, select {
+  font-family: 'Poppins', sans-serif;
   font-size: 1rem;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0.5rem 0.5rem 0;
-  border-radius: 12px;
-  border: none;
+  margin: 0.3rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #25d366;
+  background-color: transparent;
+  color: #25d366;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 0 5px #25d366,
+    0 0 10px #25d366;
+}
+
+button:hover, input:focus, select:focus {
+  background-color: #25d366;
+  color: #000000;
   outline: none;
-  color: #000;
-  background-color: #25d366;
-  box-shadow:
-    0 0 6px #25d366,
-    inset 0 0 12px #25d366;
-  transition: background-color 0.3s;
-  min-width: 140px;
-  max-width: calc(100% - 2rem);
 }
 
-#addForm input:focus,
-#addForm select:focus,
-#searchInput:focus {
-  background-color: #1ebc4b;
-  box-shadow:
-    0 0 12px #1ebc4b,
-    inset 0 0 20px #1ebc4b;
-  color: #000;
+input, select {
+  min-width: 180px;
 }
 
-#addForm button {
-  font-weight: 700;
-  cursor: pointer;
-  color: #000;
-  min-width: 100px;
-  max-width: 150px;
-}
-
-#addForm button:hover {
-  background-color: #1ebc4b;
-  box-shadow:
-    0 0 12px #1ebc4b,
-    inset 0 0 20px #1ebc4b;
-}
-
-#searchInput {
+#listsSection h2 {
+  font-weight: 600;
+  margin-top: 2rem;
   margin-bottom: 1rem;
-  max-width: 100%;
-  text-align: center;
-  color: #000;
-}
-
-.sort-buttons button {
-  background-color: #25d366;
-  border: none;
-  border-radius: 12px;
-  padding: 0.5rem 1.5rem;
-  margin: 0 0.3rem;
-  cursor: pointer;
-  font-weight: 700;
-  color: #000;
-  box-shadow:
+  text-shadow:
+    0 0 5px #25d366,
     0 0 10px #25d366,
-    0 0 20px #25d366;
-  transition: background-color 0.3s;
-  min-width: 100px;
-}
-
-.sort-buttons button:hover {
-  background-color: #1ebc4b;
-  box-shadow:
-    0 0 15px #1ebc4b,
-    0 0 35px #1ebc4b;
-}
-
-.list-container {
-  background: #111c11;
-  border-radius: 16px;
-  padding: 1rem;
-  margin: 1rem auto;
-  box-shadow:
     0 0 20px #25d366;
 }
 
 ul {
   list-style: none;
-  padding-left: 0;
-  margin: 0;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
   text-align: left;
-  max-width: 550px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-li {
-  background-color: #213621;
-  margin-bottom: 0.8rem;
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
-  box-shadow:
-    0 0 10px #25d36688;
-  color: #b9f6ca;
-  display: flex;
-  flex-direction: column;
-  user-select: text;
-}
-
-li a {
-  color: #a1e8a1;
-  font-weight: 600;
-  text-decoration: none;
-  margin-top: 0.3rem;
-  word-break: break-word;
-}
-
-li a:hover {
-  text-decoration: underline;
-}
-
-/* Gwiazdki ocen */
-
-.stars {
-  margin-top: 0.6rem;
-  user-select: none;
-}
-
-.star {
-  cursor: pointer;
-  font-size: 1.4rem;
-  color: #555;
-  transition: color 0.2s;
-  user-select: none;
-  margin-right: 2px;
-  text-shadow:
-    0 0 2px #111;
-}
-
-.star.filled {
-  color: #25d366;
-  text-shadow:
-    0 0 10px #25d366,
-    0 0 15px #25d366;
-}
-
-.star:hover,
-.star:hover ~ .star {
-  color: #1ebc4b;
-}
-
-/* Akcje (edycja / usuwanie) */
-
-.entry-actions {
-  margin-top: 0.8rem;
-  display: flex;
-  gap: 0.6rem;
-  justify-content: flex-end;
-}
-
-.entry-actions button {
-  padding: 0.3rem 0.8rem;
-  font-size: 0.85rem;
+ul li {
+  background-color: #111;
   border-radius: 8px;
-  border: none;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow:
+    0 0 5px #25d366;
+}
+
+.rating-stars {
   cursor: pointer;
-  color: #000;
-  box-shadow:
-    0 0 8px #25d366;
-  font-weight: 700;
-  transition: background-color 0.2s;
-  min-width: 70px;
+  color: #25d366;
+  font-size: 1.4rem;
+  user-select: none;
 }
 
-button.edit-btn {
-  background-color: #ffaa00;
-  box-shadow:
-    0 0 10px #ffaa00;
+.rating-stars:hover {
+  color: #2ecc71;
 }
 
-button.edit-btn:hover {
-  background-color: #cc8800;
+.sort-buttons {
+  margin: 1rem 0;
 }
 
-button.delete-btn {
-  background-color: #ff4444;
-  box-shadow:
-    0 0 10px #ff4444;
+.sort-buttons button {
+  margin: 0 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
 }
 
-button.delete-btn:hover {
-  background-color: #cc0000;
+#adminToggle {
+  margin-bottom: 1rem;
 }
 
-/* Responsywność */
+.edit-btn, .delete-btn {
+  background: none;
+  border: none;
+  color: #25d366;
+  cursor: pointer;
+  font-weight: 600;
+  margin-left: 0.7rem;
+  text-shadow:
+    0 0 3px #25d366;
+}
 
-@media (max-width: 650px) {
-  #addForm input, #addForm select, #addForm button, #searchInput {
-    max-width: 100%;
-    margin: 0.5rem 0 0.5rem 0;
-  }
+.edit-btn:hover, .delete-btn:hover {
+  color: #2ecc71;
+}
 
+@media (max-width: 700px) {
   ul {
-    max-width: 100%;
+    max-width: 90%;
   }
 }
