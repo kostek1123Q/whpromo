@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WHATSAPP PROMO</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>whpromo</title>
+<!-- Google Fonts Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<script src="script.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>WHATSAPP PROMO</h1>
-    <button id="adminToggle" title="Przełącz tryb admina">🔒 Tryb admina</button>
+    <h1>whpromo</h1>
+    <button id="adminToggle">Tryb Admina</button>
   </header>
 
   <section id="addSection">
-    <h2>Dodaj Grupę lub Kanał</h2>
     <form id="addForm">
-      <input type="text" id="name" placeholder="Nazwa" required />
-      <input type="url" id="link" placeholder="Link (np. https://chat.whatsapp.com/xyz)" required />
+      <input type="text" id="name" placeholder="Nazwa grupy/kanału" required />
+      <input type="url" id="link" placeholder="Link" required />
       <select id="type" required>
-        <option value="" disabled selected>Wybierz typ</option>
+        <option value="">Wybierz typ</option>
         <option value="Grupa">Grupa</option>
         <option value="Kanał">Kanał</option>
       </select>
@@ -27,7 +29,7 @@
   </section>
 
   <section id="searchSection">
-    <input type="search" id="searchInput" placeholder="Wyszukaj..." />
+    <input type="text" id="searchInput" placeholder="Szukaj..." />
     <div class="sort-buttons">
       <button data-sort="new">Najnowsze</button>
       <button data-sort="best">Najlepsze</button>
@@ -35,22 +37,14 @@
   </section>
 
   <section id="listsSection">
-    <div class="list-container">
-      <h2>Grupy</h2>
-      <ul id="groupList"></ul>
-    </div>
+    <h2>Grupy</h2>
+    <ul id="groupList"></ul>
 
-    <div class="list-container">
-      <h2>Kanały</h2>
-      <ul id="channelList"></ul>
-    </div>
+    <h2>Kanały</h2>
+    <ul id="channelList"></ul>
 
-    <div class="list-container">
-      <h2>Ranking TOP 5</h2>
-      <ul id="rankingList"></ul>
-    </div>
+    <h2>Ranking TOP 5</h2>
+    <ul id="rankingList"></ul>
   </section>
-
-  <script src="script.js"></script>
 </body>
 </html>
