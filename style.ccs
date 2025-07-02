@@ -1,0 +1,119 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #e0ffe0;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 2rem;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #25D366;
+  text-shadow: 0 0 10px #25D366;
+}
+
+form, #searchInput {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #1f1f1f;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #25D36644;
+  margin-bottom: 1rem;
+}
+
+input, select, button {
+  padding: 0.7rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+
+input, select {
+  background-color: #2b2b2b;
+  color: #ffffff;
+}
+
+button {
+  background-color: #25D366;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  text-shadow: 0 0 5px #00ff99;
+}
+
+button:hover {
+  background-color: #1cb655;
+}
+
+.sort-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid #25D36633;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+li {
+  background-color: #1a1a1a;
+  border-left: 5px solid #25D366;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #25D36633;
+  transition: 0.3s;
+  position: relative;
+}
+
+li:hover {
+  background-color: #2a2a2a;
+}
+
+a {
+  color: #25D366;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.stars {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.star {
+  color: gray;
+  transition: 0.2s;
+}
+
+.star.filled {
+  color: #FFD700;
+  text-shadow: 0 0 5px #FFD700;
+}
