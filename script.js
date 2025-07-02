@@ -1,233 +1,189 @@
-const webhookURL = "https://discord.com/api/webhooks/1390094366764306533/QuQVXQaVmT_ozabnxo8lQH09uhDBQN924aOvU41a53pZtmUHjiMerBk5SyrsTNMu5Udl";
+const form = document.getElementById('addForm');
+const groupList = document.getElementById('groupList');
+const channelList = document.getElementById('channelList');
+const rankingList = document.getElementById('rankingList');
+const searchInput = document.getElementById('searchInput');
+const adminToggle = document.getElementById('adminToggle');
 
-let currentSort = "new";
-const ADMIN_PASSWORD = "admin123"; // Zmień hasło admina jeśli chcesz
+let isAdmin = false;
 
-function isAdmin() {
-  return sessionStorage.getItem("isAdmin") === "true";
-}
+let items = JSON.parse(localStorage.getItem('whpromo-items')) || [];
 
-function toggleAdmin() {
-  if (isAdmin()) {
-    sessionStorage.removeItem("isAdmin");
-    alert("Wylogowano z trybu admina.");
-    renderLists();
-  } else {
-    const pass = prompt("Podaj hasło admina:");
-    if (pass === ADMIN_PASSWORD) {
-      sessionStorage.setItem("isAdmin", "true");
-      alert("Zalogowano jako admin!");
-      renderLists();
-    } else {
-      alert("Błędne hasło.");
-    }
-  }
-}
-
-document.getElementById("adminToggle").addEventListener("click", toggleAdmin);
-
-async function sendToDiscord(data) {
-  const payload = {
-    content: `🆕 Nowy wpis:
-📌 Typ: ${data.type}
-🏷️ Nazwa: ${data.name}
-🔗 Link: ${data.link}`
-  };
-
-  try {
-    await fetch(webhookURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-  } catch (err) {
-    console.error("Błąd webhooka:", err);
-  }
-}
-
-function getEntries() {
-  return JSON.parse(localStorage.getItem("entries") || "[]");
-}
-
-function saveEntries(entries) {
-  localStorage.setItem("entries", JSON.stringify(entries));
-}
-
-function getRatings() {
-  return JSON.parse(localStorage.getItem("ratings") || "{}");
-}
-
-function saveRating(link, rating) {
-  const ratings = getRatings();
-  ratings[link] = rating;
-  localStorage.setItem("ratings", JSON.stringify(ratings));
-}
-
-function getRatingFor(link) {
-  const ratings = getRatings();
-  return ratings[link] || 0;
-}
-
-function renderStars(link, container) {
-  container.innerHTML = "";
-  const currentRating = getRatingFor(link);
-
-  for (let i = 1; i <= 5; i++) {
-    const star = document.createElement("span");
-    star.classList.add("star");
-    if (i <= currentRating) star.classList.add("filled");
-    star.innerHTML = "★";
-    star.title = `Oceń ${i} gwiazdek`;
-    star.addEventListener("click", () => {
-      saveRating(link, i);
-      renderLists();
-    });
-    container.appendChild(star);
-  }
-}
-
-function sortEntries(entries) {
-  if (currentSort === "new") return entries.slice().reverse();
-  if (currentSort === "best") {
-    return entries.slice().sort((a, b) => getRatingFor(b.link) - getRatingFor(a.link));
-  }
-  return entries;
+function saveItems() {
+  localStorage.setItem('whpromo-items', JSON.stringify(items));
 }
 
 function renderLists() {
-  const entries = sortEntries(getEntries());
-  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  groupList.innerHTML = '';
+  channelList.innerHTML = '';
+  rankingList.innerHTML = '';
 
-  const groupList = document.getElementById("groupList");
-  const channelList = document.getElementById("channelList");
-  const rankingList = document.getElementById("rankingList");
+  // Sortowanie ranking top 5 (po ocenie)
+  const topItems = [...items].sort((a, b) => b.rating - a.rating).slice(0, 5);
 
-  groupList.innerHTML = "";
-  channelList.innerHTML = "";
-  rankingList.innerHTML = "";
-
-  entries.forEach(entry => {
-    if (!entry.name.toLowerCase().includes(searchValue)) return;
-
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${entry.name}</strong><br/>
-      <a href="${entry.link}" target="_blank" rel="noopener noreferrer">Otwórz</a>
-    `;
-
-    const starsDiv = document.createElement("div");
-    starsDiv.className = "stars";
-    renderStars(entry.link, starsDiv);
-    li.appendChild(starsDiv);
-
-    if (isAdmin()) {
-      const actionsDiv = document.createElement("div");
-      actionsDiv.className = "entry-actions";
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "Edytuj";
-      editBtn.className = "edit-btn";
-      editBtn.addEventListener("click", () => editEntry(entry.link));
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Usuń";
-      deleteBtn.className = "delete-btn";
-      deleteBtn.addEventListener("click", () => deleteEntry(entry.link));
-
-      actionsDiv.appendChild(editBtn);
-      actionsDiv.appendChild(deleteBtn);
-      li.appendChild(actionsDiv);
-    }
-
-    if (entry.type === "Grupa") groupList.appendChild(li);
-    else if (entry.type === "Kanał") channelList.appendChild(li);
-  });
-
-  // Ranking TOP 5 (wszystkie typy razem, posortowane po ocenach malejąco)
-  const topEntries = entries
-    .filter(e => e.name.toLowerCase().includes(searchValue))
-    .sort((a, b) => getRatingFor(b.link) - getRatingFor(a.link))
-    .slice(0, 5);
-
-  topEntries.forEach(entry => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${entry.name}</strong> (${entry.type})<br/>
-      <a href="${entry.link}" target="_blank" rel="noopener noreferrer">Otwórz</a>
-    `;
-
-    const starsDiv = document.createElement("div");
-    starsDiv.className = "stars";
-    renderStars(entry.link, starsDiv);
-    li.appendChild(starsDiv);
-
+  topItems.forEach(item => {
+    const li = createListItem(item, true);
     rankingList.appendChild(li);
   });
+
+  items.forEach(item => {
+    const li = createListItem(item, false);
+    if (item.type === 'Grupa') groupList.appendChild(li);
+    else if (item.type === 'Kanał') channelList.appendChild(li);
+  });
 }
 
-function editEntry(link) {
-  const entries = getEntries();
-  const entry = entries.find(e => e.link === link);
-  if (!entry) return alert("Nie znaleziono wpisu.");
+function createListItem(item, isRanking) {
+  const li = document.createElement('li');
+  li.dataset.id = item.id;
 
-  const newName = prompt("Nowa nazwa:", entry.name);
-  if (!newName) return;
+  const leftDiv = document.createElement('div');
+  leftDiv.style.flex = '1';
 
-  const newLink = prompt("Nowy link:", entry.link);
-  if (!newLink) return;
+  const a = document.createElement('a');
+  a.href = item.link;
+  a.textContent = item.name;
+  a.target = '_blank';
+  a.style.color = '#25d366';
+  a.style.textDecoration = 'none';
+  leftDiv.appendChild(a);
 
-  const newType = prompt("Nowy typ (Grupa/Kanał):", entry.type);
-  if (!newType || (newType !== "Grupa" && newType !== "Kanał")) return alert("Niepoprawny typ.");
+  const ratingDiv = document.createElement('div');
+  ratingDiv.classList.add('rating-stars');
 
-  entry.name = newName;
-  entry.link = newLink;
-  entry.type = newType;
-
-  saveEntries(entries);
-  renderLists();
-}
-
-function deleteEntry(link) {
-  if (!confirm("Na pewno chcesz usunąć ten wpis?")) return;
-
-  let entries = getEntries();
-  entries = entries.filter(e => e.link !== link);
-  saveEntries(entries);
-  renderLists();
-}
-
-document.getElementById("addForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value.trim();
-  const link = document.getElementById("link").value.trim();
-  const type = document.getElementById("type").value;
-
-  if (!name || !link || !type) return alert("Uzupełnij wszystkie pola.");
-
-  const entries = getEntries();
-
-  if (entries.find(e => e.link === link)) {
-    return alert("Ten link już istnieje na liście.");
+  for (let i = 1; i <= 5; i++) {
+    const star = document.createElement('span');
+    star.innerHTML = '★';
+    star.style.color = i <= item.rating ? '#25d366' : '#555';
+    star.dataset.value = i;
+    if (!isRanking && isAdmin) {
+      star.style.cursor = 'pointer';
+      star.addEventListener('click', () => {
+        item.rating = i;
+        saveItems();
+        sendDiscordWebhook(`Rating updated: ${item.name} now has ${item.rating} stars.`);
+        renderLists();
+      });
+    }
+    ratingDiv.appendChild(star);
   }
 
-  const newEntry = { name, link, type, createdAt: Date.now() };
-  entries.push(newEntry);
-  saveEntries(entries);
+  li.appendChild(leftDiv);
+  li.appendChild(ratingDiv);
 
-  await sendToDiscord(newEntry);
+  if (!isRanking && isAdmin) {
+    // Edytuj i usuń przyciski tylko dla admina
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Edytuj';
+    editBtn.classList.add('edit-btn');
+    editBtn.addEventListener('click', () => editItem(item.id));
+    li.appendChild(editBtn);
 
-  e.target.reset();
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = 'Usuń';
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.addEventListener('click', () => {
+      if (confirm(`Usunąć ${item.name}?`)) {
+        items = items.filter(i => i.id !== item.id);
+        saveItems();
+        sendDiscordWebhook(`Item deleted: ${item.name}`);
+        renderLists();
+      }
+    });
+    li.appendChild(deleteBtn);
+  }
+
+  return li;
+}
+
+function editItem(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+
+  const newName = prompt('Nowa nazwa:', item.name);
+  if (newName) item.name = newName;
+
+  const newLink = prompt('Nowy link:', item.link);
+  if (newLink) item.link = newLink;
+
+  saveItems();
+  sendDiscordWebhook(`Item edited: ${item.name}`);
   renderLists();
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!isAdmin) {
+    alert('Tylko admin może dodawać elementy!');
+    return;
+  }
+
+  const name = form.name.value.trim();
+  const link = form.link.value.trim();
+  const type = form.type.value;
+
+  if (!name || !link || !type) return alert('Wypełnij wszystkie pola!');
+
+  const newItem = {
+    id: Date.now().toString(),
+    name,
+    link,
+    type,
+    rating: 0,
+    created: Date.now()
+  };
+
+  items.push(newItem);
+  saveItems();
+  sendDiscordWebhook(`Item added: ${name} (${type})`);
+  renderLists();
+  form.reset();
 });
 
-document.getElementById("searchInput").addEventListener("input", renderLists);
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase();
+  filterLists(query);
+});
 
-document.querySelectorAll(".sort-buttons button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentSort = btn.dataset.sort;
+function filterLists(query) {
+  [...groupList.children].forEach(li => {
+    li.style.display = li.textContent.toLowerCase().includes(query) ? '' : 'none';
+  });
+  [...channelList.children].forEach(li => {
+    li.style.display = li.textContent.toLowerCase().includes(query) ? '' : 'none';
+  });
+  [...rankingList.children].forEach(li => {
+    li.style.display = li.textContent.toLowerCase().includes(query) ? '' : 'none';
+  });
+}
+
+document.querySelectorAll('.sort-buttons button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (btn.dataset.sort === 'new') {
+      items.sort((a, b) => b.created - a.created);
+    } else if (btn.dataset.sort === 'best') {
+      items.sort((a, b) => b.rating - a.rating);
+    }
     renderLists();
   });
 });
 
+adminToggle.addEventListener('click', () => {
+  isAdmin = !isAdmin;
+  adminToggle.textContent = isAdmin ? 'Tryb Użytkownika' : 'Tryb Admina';
+  renderLists();
+});
+
+// Discord webhook
+const discordWebhookURL = "https://discord.com/api/webhooks/1390094366764306533/QuQVXQaVmT_ozabnxo8lQH09uhDBQN924aOvU41a53pZtmUHjiMerBk5SyrsTNMu5Udl";
+
+function sendDiscordWebhook(message) {
+  fetch(discordWebhookURL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({content: message})
+  }).catch(err => console.error('Webhook error:', err));
+}
+
+// Initial render
 renderLists();
