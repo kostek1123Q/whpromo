@@ -7,7 +7,10 @@
 <!-- Google Fonts Poppins -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="style.css" />
-<script src="script.js" defer></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script defer src="script.js"></script>
 </head>
 <body>
   <header>
@@ -21,8 +24,8 @@
       <input type="url" id="link" placeholder="Link" required />
       <select id="type" required>
         <option value="">Wybierz typ</option>
-        <option value="Grupa">Grupa</option>
-        <option value="Kanał">Kanał</option>
+        <option value="groups">Grupa</option>
+        <option value="channels">Kanał</option>
       </select>
       <button type="submit">Dodaj</button>
     </form>
@@ -46,5 +49,21 @@
     <h2>Ranking TOP 5</h2>
     <ul id="rankingList"></ul>
   </section>
+
+  <script>
+    // Firebase config i init
+    const firebaseConfig = {
+      apiKey: "AIzaSyCa3peMi77oYFn12a2Py1p5wxjG0eu7XkI",
+      authDomain: "whpromo-621fb.firebaseapp.com",
+      databaseURL: "https://whpromo-621fb-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "whpromo-621fb",
+      storageBucket: "whpromo-621fb.firebasestorage.app",
+      messagingSenderId: "580137422916",
+      appId: "1:580137422916:web:7596e00ee550074694ec11",
+      measurementId: "G-PS9SEK1HHP"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+  </script>
 </body>
 </html>
