@@ -1,124 +1,201 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #000000;
-  color: #25d366;
-  font-family: 'Poppins', sans-serif;
   margin: 0;
-  padding: 1rem;
-  text-align: center;
-  user-select: none;
-}
-
-header h1 {
-  font-weight: 600;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-shadow:
-    0 0 5px #25d366,
-    0 0 10px #25d366,
-    0 0 20px #25d366,
-    0 0 40px #25d366;
-}
-
-button, input, select {
   font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
-  margin: 0.3rem;
-  padding: 0.4rem 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #25d366;
-  background-color: transparent;
-  color: #25d366;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow:
-    0 0 5px #25d366,
-    0 0 10px #25d366;
+  background-color: #121b22; /* ciemne tło */
+  color: #e1e6eb; /* jasny, ale nie biały tekst */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
-button:hover, input:focus, select:focus {
+header {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: #075e54; /* klasyczny WhatsApp zielony */
+  color: white;
+  font-weight: 700;
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+button#adminToggle {
   background-color: #25d366;
-  color: #000000;
-  outline: none;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+button#adminToggle:hover {
+  background-color: #128c7e;
+}
+
+#addSection, #searchSection, #listsSection {
+  width: 90%;
+  max-width: 700px;
+  margin: 20px 0;
+}
+
+form#addForm {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 input, select {
-  min-width: 180px;
+  flex: 1 1 150px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #25d366;
+  background-color: #202c33;
+  color: #e1e6eb;
+  font-weight: 500;
+  font-size: 1rem;
+  outline-offset: 2px;
 }
 
-#listsSection h2 {
+input::placeholder, select option {
+  color: #a0b4b7;
+}
+
+button[type="submit"] {
+  background-color: #25d366;
+  border: none;
+  color: white;
+  font-weight: 700;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  flex: 0 0 auto;
+}
+
+button[type="submit"]:hover {
+  background-color: #128c7e;
+}
+
+#searchSection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+}
+
+#searchInput {
+  flex: 1 1 300px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #25d366;
+  background-color: #202c33;
+  color: #e1e6eb;
+  font-weight: 500;
+  font-size: 1rem;
+  outline-offset: 2px;
+}
+
+.sort-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.sort-buttons button {
+  background-color: #25d366;
+  border: none;
+  color: white;
   font-weight: 600;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-shadow:
-    0 0 5px #25d366,
-    0 0 10px #25d366,
-    0 0 20px #25d366;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.sort-buttons button:hover {
+  background-color: #128c7e;
+}
+
+h2 {
+  border-bottom: 1px solid #25d366;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
 ul {
   list-style: none;
   padding: 0;
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
-  text-align: left;
+  margin: 0 0 30px 0;
 }
 
-ul li {
-  background-color: #111;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  padding: 0.8rem 1rem;
+li {
+  background-color: #202c33;
+  margin-bottom: 10px;
+  padding: 15px 20px;
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow:
-    0 0 5px #25d366;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.5);
 }
 
-.rating-stars {
-  cursor: pointer;
+li a {
   color: #25d366;
-  font-size: 1.4rem;
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #b2f2bb;
   user-select: none;
 }
 
-.rating-stars:hover {
-  color: #2ecc71;
-}
-
-.sort-buttons {
-  margin: 1rem 0;
-}
-
-.sort-buttons button {
-  margin: 0 0.5rem;
-  padding: 0.4rem 1rem;
-  border-radius: 12px;
-}
-
-#adminToggle {
-  margin-bottom: 1rem;
-}
-
-.edit-btn, .delete-btn {
+.rating button {
   background: none;
   border: none;
-  color: #25d366;
   cursor: pointer;
-  font-weight: 600;
-  margin-left: 0.7rem;
-  text-shadow:
-    0 0 3px #25d366;
+  font-size: 1.2rem;
+  color: #25d366;
+  transition: color 0.2s ease;
 }
 
-.edit-btn:hover, .delete-btn:hover {
-  color: #2ecc71;
+.rating button:hover {
+  color: #128c7e;
 }
 
-@media (max-width: 700px) {
-  ul {
-    max-width: 90%;
-  }
+.delete-btn {
+  background-color: #c0392b;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.25s ease;
+}
+
+.delete-btn:hover {
+  background-color: #7f1f17;
 }
