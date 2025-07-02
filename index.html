@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Grupy i Kanały</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📱 WhatsApp Grupy i Kanały</h1>
+
+    <form id="addForm">
+      <input type="text" id="name" placeholder="Nazwa grupy/kanału" required />
+      <input type="url" id="link" placeholder="Link WhatsApp" required />
+      <select id="type" required>
+        <option value="Grupa">Grupa</option>
+        <option value="Kanał">Kanał</option>
+      </select>
+      <button type="submit">➕ Dodaj</button>
+    </form>
+
+    <input type="text" id="searchInput" placeholder="🔍 Szukaj grupy lub kanału..." />
+
+    <div class="sort-controls">
+      Sortuj:
+      <button data-sort="new">🕒 Najnowsze</button>
+      <button data-sort="best">⭐ Najlepsze</button>
+    </div>
+
+    <hr />
+
+    <div class="lists">
+      <div>
+        <h2>📂 Grupy</h2>
+        <ul id="groupList"></ul>
+      </div>
+
+      <div>
+        <h2>📢 Kanały</h2>
+        <ul id="channelList"></ul>
+      </div>
+    </div>
+
+    <hr />
+
+    <div>
+      <h2>🏆 Ranking All Time</h2>
+      <ul id="rankingList"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
